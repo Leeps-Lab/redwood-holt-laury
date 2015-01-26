@@ -1,6 +1,8 @@
+/*
+  Holt-Laury Experiment Start Page Controller
+*/
 
-
-Redwood.controller("SubjectCtrl", ["$rootScope", "$scope", "RedwoodSubject", function($rootScope, $scope, rs) {
+Redwood.controller("HoltLauryController", ["$rootScope", "$scope", "RedwoodSubject", function($rootScope, $scope, rs) {
 
   $scope.decisions = [
     {
