@@ -1,20 +1,10 @@
 <div ng-controller="HoltLauryController" style="padding-top:60px;">
-    
-  <div class="navbar navbar-fixed-top container">
-    <div class="navbar-inner">
-      <div class="container-fluid">
-        <div class="brand" href="#">Economics Experiment</div>
-        <div class="nav-collapse collapse">
-          <p class="navbar-text pull-right">
-            User ID: <span name="data-user-id" class="navbar-link">{{user_id}}</span>
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
+
+  <div rw-subject-header title="Economics Experiment"></div>
+
   <div class="container">
     <div class="row">
-      <div class="span12">
+      <div class="col-md-12">
         <div ng-repeat="decision in decisions" class="decision">
           <label for="choice-{{$index}}-0" class="choice">
             <input id="choice-{{$index}}-0"
