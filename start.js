@@ -82,7 +82,7 @@ Redwood.controller("HoltLauryController", ["$rootScope", "$scope", "RedwoodSubje
       return prev + (curr === "lessRisk" ? 1 : 0);
     }, 0);
 
-    rs.trigger("finished_questions", {
+    rs.trigger("hl.finished_questions", {
       "view": $scope.treatment,
       "result": score,
       "result-text": $scope.riskAversionText[score]
@@ -93,7 +93,7 @@ Redwood.controller("HoltLauryController", ["$rootScope", "$scope", "RedwoodSubje
   };
 
   $scope.selectOption = function(decisionId, selection) {
-    rs.trigger("selected_option", {
+    rs.trigger("hl.selected_option", {
       "treatment": $scope.treatment,
       "question-text": $scope.decisions[decisionId].text,
       "question": decisionId+1,
@@ -101,7 +101,7 @@ Redwood.controller("HoltLauryController", ["$rootScope", "$scope", "RedwoodSubje
     });
   };
 
-  rs.on("selected_option", function(value) {
+  rs.on("hl.selected_option", function(value) {
     // seems redundant, but necessary for restoring when the page is refreshed
     $scope.subjectDecisions[value.question-1] = value.selection;
 
