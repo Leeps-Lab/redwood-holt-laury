@@ -4,7 +4,7 @@
 
 Redwood.controller("HoltLauryController", ["$rootScope", "$scope", "RedwoodSubject", function($rootScope, $scope, rs) {
 
-  $scope.decisions = [
+  $scope.allDecisions = [
     {
       text: "1/10 of $2.00, 9/10 of $1.60 or 1/10 of $3.85, 9/10 of $0.10?",
       choice1: [{chance: 0.1, payoff: 2.00}, {chance: 0.9, payoff: 1.60}],
@@ -73,9 +73,9 @@ Redwood.controller("HoltLauryController", ["$rootScope", "$scope", "RedwoodSubje
   
   // bound to the users radio button selections
   $scope.subjectDecisions = [];
-  $scope.redwoodLoaded = false;
   $scope.unansweredQuestions = 10;
   $scope.periodOver = false;
+  $scope.redwoodLoaded = false;
 
   $scope.finishPeriod = function() {
     var score = $scope.subjectDecisions.reduce(function(prev, curr, index, array) {
@@ -115,6 +115,15 @@ Redwood.controller("HoltLauryController", ["$rootScope", "$scope", "RedwoodSubje
   rs.on_load(function() { //called once the page has loaded for a new sub period
     $scope.user_id = rs.user_id;
     $scope.treatment = rs.config.treatment;
+    $scope.rowOrder = rs.config.rowOrder || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    console.log($scope.rowOrder);
+
+    // generate array of decisions specified by rowOrder
+    $scope.decisions = $scope.rowOrder.map(function(row) {
+      var index = row - 1;
+      return $scope.allDecisions[index];
+    });
+
     $scope.redwoodLoaded = true;
   });
 }]);
@@ -182,7 +191,7 @@ Redwood.directive("choiceView", ["RedwoodSubject", function(rs) {
       prepareFunctions[$scope.treatment]($scope, $scope.choice);
       $scope.primary_color_1 = primary_color_1;
       $scope.primary_color_2 = primary_color_2;
-      
+
       $scope.drawPie = function() {
         var colors = [primary_color_1, primary_color_2];
         var context = $element[0].getElementsByTagName("canvas")[0].getContext("2d");
