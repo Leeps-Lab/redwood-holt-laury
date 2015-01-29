@@ -11,11 +11,10 @@ Redwood.controller("HLFinishController", ["$scope", "RedwoodSubject", function($
             var lottery = entry.decision.choices[subjectChoice];
 
             // perform the random lottery
-            console.log($scope.randomNumber);
             var index = $scope.randomNumber < lottery[0].chance ? 0 : 1;
 
             var payout = lottery[index].payoff;
-            return entry.selected ? payout : 0;
+            return payout;
         } else {
             return 0;
         }
@@ -23,13 +22,15 @@ Redwood.controller("HLFinishController", ["$scope", "RedwoodSubject", function($
 
     rs.on_load(function() {
         var results = rs.subject[rs.user_id].data["hl.results"];
-
-        $scope.results = results.map(function(result) {
+        
+        $scope.results = [];
+        for (var i = 0; i < results.length; i++) {
+            var result = results[i];
             result.selected = false;
             result.decision = null;
             result.decisionText = null;
-            return result;
-        })
+            $scope.results.push(result);
+        }
 
         rs.send("__set_show_up_fee__", {show_up_fee: 5.0});
         rs.send("__set_conversion_rate__", {conversion_rate: 1/140});
@@ -40,10 +41,14 @@ Redwood.controller("HLFinishController", ["$scope", "RedwoodSubject", function($
     })
 
     rs.on("payout_select_period", function(period) {
-        var result = $scope.results[period-1];
-        result.selected = !result.selected;
-        $scope.selectedPeriod = period;
-        $scope.selectedResult = result;
+        var result = $scope.results.filter(function(result) {
+            return result.period === period;
+        })[0];
+        if (result) {
+            result.selected = !result.selected;
+            $scope.selectedPeriod = period;
+            $scope.selectedResult = result;
+        }
     });
 
     rs.on("hl.payout_select_decision", function(decisionID) {
