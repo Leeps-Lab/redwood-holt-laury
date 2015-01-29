@@ -87,6 +87,20 @@ Redwood.controller("HoltLauryController", ["$rootScope", "$scope", "RedwoodSubje
       "result": score,
       "result-text": $scope.riskAversionText[score]
     });
+
+    // save data for payouts
+    var comprehensiveDecisions = $scope.subjectDecisions.map(function(decision, index) {
+      return {
+        "decision": decision,
+        "choices": [ $scope.decisions[index].choice1, $scope.decisions[index].choice2]
+      }
+    });
+    console.log(rs.self.period);
+    rs.set("hl.results", {
+      "period": rs.period,
+      "view": $scope.treatment,
+      "decisions": comprehensiveDecisions
+    });
     
     $scope.periodOver = true;
     rs.next_period();
@@ -116,7 +130,6 @@ Redwood.controller("HoltLauryController", ["$rootScope", "$scope", "RedwoodSubje
     $scope.user_id = rs.user_id;
     $scope.treatment = rs.config.treatment;
     $scope.rowOrder = rs.config.rowOrder || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    console.log($scope.rowOrder);
 
     // generate array of decisions specified by rowOrder
     $scope.decisions = $scope.rowOrder.map(function(row) {
