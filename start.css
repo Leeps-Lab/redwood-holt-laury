@@ -11,6 +11,8 @@ body {
 
 .choice {
   position: relative;
+  margin: 0;
+  padding: 0;
   float: left;
   width: 50%;
 }
@@ -30,12 +32,12 @@ body {
   right: 10px;
 }
 
-.choice input[type=radio]:checked {
-  border-left: 4px solid #f0f0f0;
+.choice:hover {
+  background: #e0e0e0;
 }
 
-input[type="radio"]:checked ~ .choice-background {
-  background: #f8f8f8;
+.choice input[type=radio]:checked {
+  border-left: 4px solid #f0f0f0;
 }
 
 .anchor-button {

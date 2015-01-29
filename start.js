@@ -127,111 +127,78 @@ Redwood.directive("choiceView", ["RedwoodSubject", function(rs) {
   var secondary_color_1 = "#1571a5";
   var secondary_color_2 = "#b02113";
 
-  var renderers = {
-    "text": function(choice) {
-      var fraction0 = (choice[0].chance * 10).toString() + "/10";
-      var fraction1 = (choice[1].chance * 10).toString() + "/10";
-      var dollar0 = "$"+choice[0].payoff.toFixed(2);
-      var dollar1 = "$"+choice[1].payoff.toFixed(2);
-      var text = fraction0 + " chance of " + dollar0 + ", " + fraction1 + " chance of " + dollar1;
-      var alignElem = '<span style="display: inline-block; height: 100%; vertical-align: middle"></span>';
-      var textElem = '<span style="display: inline-block; vertical-align: middle;">' + text + '</span>';
-      return alignElem + textElem;
+  var prepareFunctions = {
+    "text": function($scope, choice) {
+      $scope.fraction0 = (choice[0].chance * 10).toString() + "/10";
+      $scope.fraction1 = (choice[1].chance * 10).toString() + "/10";
+      $scope.dollar0 = choice[0].payoff;
+      $scope.dollar1 = choice[1].payoff;
     },
-
-    "bar": function(choice) {
-      var width0 = choice[0].chance * 410;
-      var width1 = choice[1].chance * 410;
-      return '<svg width="100%" height="100%" viewBox="0 0 410 80"> \
-        <rect width="'+width0+'" height="20" x="0" y="0" fill="'+primary_color_1+'" /> \
-        <rect width="'+width1+'" height="20" x="'+width0+'" y="0" fill="'+primary_color_2+'" /> \
-        <text x="0" y="40"> \
-          '+"$"+choice[0].payoff.toFixed(2)+'\
-        </text> \
-        <text x="'+(width0)+'" y="40"> \
-          '+"$"+choice[1].payoff.toFixed(2)+'\
-        </text> \
-      </svg>';
+    "bar": function($scope, choice) {
+      $scope.width0 = choice[0].chance * 410;
+      $scope.width1 = choice[1].chance * 410;
     },
-
-    "bar-inverted": function(choice) {
-      var width0 = choice[0].chance * 410;
-      var width1 = choice[1].chance * 410;
-      var textX0 = width0 < 150 ? width0 + 10 : width0 - 10;
-      var textX1 = width1 < 150 ? width1 + 10 : width1 - 10;
-      var textAnchor0 = width0 < 150 ? "start" : "end";
-      var textAnchor1 = width1 < 150 ? "start" : "end";
-      return '<svg width="100%" height="100%" viewBox="0 0 410 80"> \
-        <rect width="'+width0+'" height="40" x="0" y="0" fill="'+primary_color_1+'" /> \
-        <rect width="'+width1+'" height="40" x="0" y="40" fill="'+primary_color_2+'" /> \
-        <text x="'+textX0+'" y="24" text-anchor="'+textAnchor0+'"> \
-          '+choice[0].chance*100+"% chance of $"+choice[0].payoff.toFixed(2)+'\
-        </text> \
-        <text x="'+textX1+'" y="64" text-anchor="'+textAnchor1+'"> \
-          '+choice[1].chance*100+"% chance of $"+choice[1].payoff.toFixed(2)+'\
-        </text> \
-      </svg>';
+    "bar-height": function($scope, choice) {
+      $scope.width0 = choice[0].chance * 410;
+      $scope.width1 = choice[1].chance * 410;
+      $scope.maxHeight = 40;
+      $scope.height0 = choice[0].payoff/4.0 * $scope.maxHeight;
+      $scope.height1 = choice[1].payoff/4.0 * $scope.maxHeight;
     },
-
-    "bar-height": function(choice) {
-      var width0 = choice[0].chance * 410;
-      var width1 = choice[1].chance * 410;
-      var maxHeight = 40;
-      var height0 = choice[0].payoff/4.0 * maxHeight;
-      var height1 = choice[1].payoff/4.0 * maxHeight;
-      return '<svg width="100%" height="100%" viewBox="0 0 410 80"> \
-        <rect width="'+width0+'" height="'+height0+'" x="0" y="'+(maxHeight-height0)+'" fill="'+primary_color_1+'" /> \
-        <rect width="'+width1+'" height="'+height1+'" x="'+width0+'" y="'+(maxHeight-height1)+'" fill="'+primary_color_2+'" /> \
-        <text x="0" y="'+(maxHeight+20)+'"> \
-          '+"$"+choice[0].payoff.toFixed(2)+'\
-        </text> \
-        <text x="'+(width0)+'" y="'+(maxHeight+20)+'"> \
-          '+"$"+choice[1].payoff.toFixed(2)+'\
-        </text> \
-      </svg>';
+    "bar-inverted": function($scope, choice) {
+      $scope.width0 = choice[0].chance * 410;
+      $scope.width1 = choice[1].chance * 410;
+      $scope.textX0 = $scope.width0 < 150 ? $scope.width0 + 10 : $scope.width0 - 10;
+      $scope.textX1 = $scope.width1 < 150 ? $scope.width1 + 10 : $scope.width1 - 10;
+      $scope.textAnchor0 = $scope.width0 < 150 ? "start" : "end";
+      $scope.textAnchor1 = $scope.width1 < 150 ? "start" : "end";
     },
+    "pie": function($scope, choice) {},
+    "pie-height": function($scope, choice) {}
+  }
 
-    "pie": function(choice) {
-      return '<canvas width="410" height="80"></canvas>';
-    },
+  var drawLegend = function(context, colors, choice) {
+    context.fillStyle = colors[0];
+    context.fillRect(120, 10, 20, 20);
 
-    "pie-height": function(choice) {
-      return '<canvas width="410" height="80"></canvas>';
-    }
-  };
+    context.fillStyle = colors[1];
+    context.fillRect(120, 50, 20, 20);
+
+    context.fillStyle = "#000000";
+    context.font = "14px sans-serif";
+    context.textBaseline = "middle";
+    context.fillText(choice[0].chance * 100 + "% chance of $" + choice[0].payoff.toFixed(2), 150, 20);
+    context.fillText(choice[1].chance * 100 + "% chance of $" + choice[1].payoff.toFixed(2), 150, 60);
+  }
   
   return {
-    template: function(element, attrs) {
-      return '';
+    scope: {
+      choice: "=",
+      treatment: "="
     },
-    link: function postLink(scope, element, attrs) {
-      var choice = scope.$eval(attrs.choice);
-      element.html(renderers[scope.treatment](choice));
+    templateUrl: "/static/experiments/redwood-holt-laury/choiceView.html",
+    link: function postLink($scope, $element, attrs) {
 
-      // hacky, but can't see any other angulary way to do this
-      if (scope.treatment === "pie") {
+      prepareFunctions[$scope.treatment]($scope, $scope.choice);
+      $scope.primary_color_1 = primary_color_1;
+      $scope.primary_color_2 = primary_color_2;
+      
+      $scope.drawPie = function() {
         var colors = [primary_color_1, primary_color_2];
-        var context = $("canvas", element).get(0).getContext("2d");
-        draw_pie(context, 50, 40, 40, choice, colors);
-
-        // draw legend
-        context.fillStyle = colors[0];
-        context.fillRect(120, 10, 20, 20);
-
-        context.fillStyle = colors[1];
-        context.fillRect(120, 50, 20, 20);
-
-        context.fillStyle = "#000000";
-        context.font = "14px sans-serif";
-        context.textBaseline = "middle";
-        context.fillText(choice[0].chance * 100 + "% chance of $" + choice[0].payoff.toFixed(2), 150, 20);
-        context.fillText(choice[1].chance * 100 + "% chance of $" + choice[1].payoff.toFixed(2), 150, 60);
+        var context = $element[0].getElementsByTagName("canvas")[0].getContext("2d");
+        
+        context.clearRect(0, 0, 410, 80);
+        draw_pie(context, 50, 40, 40, $scope.choice, colors);
+        drawLegend(context, colors, $scope.choice)
       }
 
-      if (scope.treatment === "pie-height") {
+      $scope.drawPieHeight = function() {
         var colors = [[primary_color_1, secondary_color_1], [primary_color_2, secondary_color_2]];
-        var context = $("canvas", element).get(0).getContext("2d");
-        draw_pie_3d(context, 50, 0, 50, choice, colors);
+        var context = $element[0].getElementsByTagName("canvas")[0].getContext("2d");
+        
+        context.clearRect(0, 0, 410, 80);
+        draw_pie_3d(context, 50, 0, 50, $scope.choice, colors);
+        drawLegend(context, [primary_color_1, primary_color_2], $scope.choice)
       }
     }
   };
