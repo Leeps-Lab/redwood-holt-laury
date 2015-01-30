@@ -73,7 +73,8 @@ Redwood.controller("HoltLauryController", ["$rootScope", "$scope", "RedwoodSubje
   
   // bound to the users radio button selections
   $scope.subjectDecisions = [];
-  $scope.unansweredQuestions = 10;
+  $scope.maxQuestions = 10;
+  $scope.unansweredQuestions = $scope.maxQuestions;
   $scope.periodOver = false;
   $scope.redwoodLoaded = false;
 
@@ -95,7 +96,7 @@ Redwood.controller("HoltLauryController", ["$rootScope", "$scope", "RedwoodSubje
         "choices": [ $scope.decisions[index].choice1, $scope.decisions[index].choice2]
       }
     });
-    console.log(rs.self.period);
+    
     rs.set("hl.results", {
       "period": rs.period,
       "view": $scope.treatment,
@@ -115,15 +116,20 @@ Redwood.controller("HoltLauryController", ["$rootScope", "$scope", "RedwoodSubje
     });
   };
 
-  rs.on("hl.selected_option", function(value) {
-    // seems redundant, but necessary for restoring when the page is refreshed
-    $scope.subjectDecisions[value.question-1] = value.selection;
-
+  $scope.recomputeUnansweredQuestions = function() {
     var answerCount = $scope.subjectDecisions.reduce(function(prev, curr, index, array) {
       return prev + (typeof curr !== "undefined" ? 1 : 0);
     }, 0);
 
-    $scope.unansweredQuestions = 10 - answerCount;
+    $scope.unansweredQuestions = $scope.maxQuestions - answerCount;
+  };
+
+  $scope.$watch("maxQuestions", $scope.recomputeUnansweredQuestions);
+
+  rs.on("hl.selected_option", function(value) {
+    // seems redundant, but necessary for restoring when the page is refreshed
+    $scope.subjectDecisions[value.question-1] = value.selection;
+    $scope.recomputeUnansweredQuestions();
   });
   
   rs.on_load(function() { //called once the page has loaded for a new sub period
@@ -136,6 +142,8 @@ Redwood.controller("HoltLauryController", ["$rootScope", "$scope", "RedwoodSubje
       var index = row - 1;
       return $scope.allDecisions[index];
     });
+
+    $scope.maxQuestions = $scope.decisions.length;
 
     $scope.redwoodLoaded = true;
   });
