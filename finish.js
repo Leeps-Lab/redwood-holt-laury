@@ -23,6 +23,10 @@ Redwood.controller("HLFinishController", ["$scope", "RedwoodSubject", function($
     rs.on_load(function() {
         var results = rs.subject[rs.user_id].data["hl.results"];
         
+        if (!results) {
+            return;
+        }
+
         $scope.results = [];
         for (var i = 0; i < results.length; i++) {
             var result = results[i];
