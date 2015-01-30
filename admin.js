@@ -2,7 +2,7 @@ Redwood.controller("HLAdminController", ["Admin", "$scope", function(ra, $scope)
     $scope.selectedPeriod = null;
     $scope.decisionIndices = [];
 
-    ra.recv("payout_select_period", function(period) {
+    ra.recv("payout_select_period", function(sender, period) {
         $scope.selectedPeriod = period;
         $scope.decisionIndices = [];
         var rowOrder = ra.get_config(period, 0).rowOrder;
