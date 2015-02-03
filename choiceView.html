@@ -14,10 +14,14 @@
             ng-attr-x="{{width0}}" y="30" 
             ng-attr-fill="{{primaryColor2}}" /> 
       <text ng-attr-x="{{textPosition1}}" y="70" text-anchor="middle"> 
-        {{choice[0].chance | fraction: 10}} of ${{choice[0].payoff | number:2}}
+        {{showProbability ? (choice[0].chance | fraction: 10) : ''}}
+        {{(showProbability && showPayoff) ? 'of ' : ''}}
+        {{showPayoff ? '$'+(choice[0].payoff | number:2) : ''}}
       </text> 
       <text ng-attr-x="{{textPosition2}}" y="70" text-anchor="middle"> 
-        {{choice[1].chance | fraction: 10}} of ${{choice[1].payoff | number:2}}
+        {{showProbability ? (choice[1].chance | fraction: 10) : ''}}
+        {{(showProbability && showPayoff) ? 'of ' : ''}}
+        {{showPayoff ? '$'+(choice[1].payoff | number:2) : ''}}      
       </text> 
     </svg>
   </div>
@@ -31,10 +35,13 @@
             ng-attr-x="{{width0}}" ng-attr-y="{{maxHeight-height1}}"
             ng-attr-fill="{{primaryColor2}}" /> 
       <text ng-attr-x="{{textPosition1}}" ng-attr-y="{{maxHeight+20}}" text-anchor="middle"> 
-        {{choice[0].chance | fraction: 10}} of ${{choice[0].payoff | number:2}}
-      </text> 
+        {{showProbability ? (choice[0].chance | fraction: 10) : ''}}
+        {{(showProbability && showPayoff) ? 'of ' : ''}}
+        {{showPayoff ? '$'+(choice[0].payoff | number:2) : ''}}      </text> 
       <text ng-attr-x="{{textPosition2}}" ng-attr-y="{{maxHeight+20}}" text-anchor="middle">
-        {{choice[1].chance | fraction: 10}} of ${{choice[1].payoff | number:2}}
+        {{showProbability ? (choice[1].chance | fraction: 10) : ''}}
+        {{(showProbability && showPayoff) ? 'of ' : ''}}
+        {{showPayoff ? '$'+(choice[1].payoff | number:2) : ''}}
       </text> 
     </svg>
   </div>
@@ -44,10 +51,13 @@
         <rect ng-attr-width="{{width0}}" height="40" x="0" y="0" ng-attr-fill="{{primaryColor1}}" />
         <rect ng-attr-width="{{width1}}" height="40" x="0" y="40" ng-attr-fill="{{primaryColor2}}" />
         <text ng-attr-x="{{textX0}}" y="24" ng-attr-text-anchor="{{textAnchor0}}">
-          {{choice[0].chance | fraction: 10}} of ${{choice[0].payoff | number: 2}}
-        </text>
+          {{showProbability ? (choice[0].chance | fraction: 10) : ''}}
+          {{(showProbability && showPayoff) ? 'of ' : ''}}
+          {{showPayoff ? '$'+(choice[0].payoff | number:2) : ''}}        </text>
         <text ng-attr-x="{{textX1}}" y="64" ng-attr-text-anchor="{{textAnchor1}}">
-          {{choice[1].chance | fraction: 10}} of ${{choice[1].payoff | number: 2}}
+          {{showProbability ? (choice[1].chance | fraction: 10) : ''}}
+          {{(showProbability && showPayoff) ? 'of ' : ''}}
+          {{showPayoff ? '$'+(choice[1].payoff | number:2) : ''}}
         </text>
       </svg>
   </div>

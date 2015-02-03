@@ -136,6 +136,8 @@ Redwood.controller("HoltLauryController", ["$rootScope", "$scope", "RedwoodSubje
     $scope.user_id = rs.user_id;
     $scope.treatment = rs.config.treatment;
     $scope.rowOrder = rs.config.rowOrder || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    $scope.showProbability = rs.config.hasOwnProperty("showProbability") ? rs.config.showProbability : true;
+    $scope.showPayoff = rs.config.hasOwnProperty("showPayoff") ? rs.config.showPayoff : true;
     $scope.keyColor1 = rs.config.keyColor1 || "#2382D7" || "#229fd9";
     $scope.tintColor1 = rs.config.tintColor1 || "#4594DB" || "#1571a5";
     $scope.keyColor2 = rs.config.keyColor2 || "#0659A3" || "#db2e1b";
@@ -168,6 +170,8 @@ Redwood.directive("choiceView", ["RedwoodSubject", "$filter", function(rs, $filt
     scope: {
       choice: "=",
       treatment: "=",
+      showProbability: "=?",
+      showPayoff: "=?",
       primaryColor1: "=",
       secondaryColor1: "=",
       primaryColor2: "=",
@@ -221,8 +225,27 @@ Redwood.directive("choiceView", ["RedwoodSubject", "$filter", function(rs, $filt
         context.fillStyle = "#000000";
         context.font = "14px sans-serif";
         context.textBaseline = "middle";
-        context.fillText($filter("fraction")(choice[0].chance, 10) + " of $" + choice[0].payoff.toFixed(2), 150, 20);
-        context.fillText($filter("fraction")(choice[1].chance, 10) + " of $" + choice[1].payoff.toFixed(2), 150, 60);
+
+        var choiceText0 = "";
+        var choiceText1 = "";
+
+        if ($scope.showProbability) {
+          choiceText0 += $filter("fraction")(choice[0].chance, 10);
+          choiceText1 += $filter("fraction")(choice[1].chance, 10);
+        }
+
+        if ($scope.showProbability && $scope.showPayoff) {
+          choiceText0 += " of ";
+          choiceText1 += " of ";
+        }
+
+        if ($scope.showPayoff) {
+          choiceText0 += "$"+choice[0].payoff.toFixed(2);
+          choiceText1 += "$"+choice[1].payoff.toFixed(2);
+        }
+
+        context.fillText(choiceText0, 150, 20);
+        context.fillText(choiceText1, 150, 60);
       }
 
       prepareFunctions[$scope.treatment]($scope, $scope.choice);
