@@ -153,8 +153,17 @@ Redwood.controller("HoltLauryController", ["$rootScope", "$scope", "RedwoodSubje
   });
 }]);
 
+// Filter to convert numbers to fractional strings
+Redwood.filter("fraction", function() {
+  return function(input, base) {
+    input = input || 0;
+    base = base || 1;
+    return (input * base).toString() + "/" + base;
+  }
+})
+
 // Rendering
-Redwood.directive("choiceView", ["RedwoodSubject", function(rs) {
+Redwood.directive("choiceView", ["RedwoodSubject", "$filter", function(rs, $filter) {
   return {
     scope: {
       choice: "=",
@@ -172,14 +181,14 @@ Redwood.directive("choiceView", ["RedwoodSubject", function(rs) {
 
       var prepareFunctions = {
         "text": function($scope, choice) {
-          $scope.fraction0 = (choice[0].chance * 10).toString() + "/10";
-          $scope.fraction1 = (choice[1].chance * 10).toString() + "/10";
           $scope.dollar0 = choice[0].payoff;
           $scope.dollar1 = choice[1].payoff;
         },
         "bar": function($scope, choice) {
           $scope.width0 = choice[0].chance * $scope.viewWidth;
           $scope.width1 = choice[1].chance * $scope.viewWidth;
+          $scope.textPosition1 = Math.max($scope.width0 / 2, 50);
+          $scope.textPosition2 = $scope.width0 + $scope.width1 / 2;
         },
         "bar-height": function($scope, choice) {
           $scope.width0 = choice[0].chance * $scope.viewWidth;
@@ -187,6 +196,8 @@ Redwood.directive("choiceView", ["RedwoodSubject", function(rs) {
           $scope.maxHeight = $scope.viewHeight/2;
           $scope.height0 = choice[0].payoff/4.0 * $scope.maxHeight;
           $scope.height1 = choice[1].payoff/4.0 * $scope.maxHeight;
+          $scope.textPosition1 = Math.max($scope.width0 / 2, 50);
+          $scope.textPosition2 = $scope.width0 + $scope.width1 / 2;
         },
         "bar-inverted": function($scope, choice) {
           $scope.width0 = choice[0].chance * $scope.viewWidth;
@@ -210,8 +221,8 @@ Redwood.directive("choiceView", ["RedwoodSubject", function(rs) {
         context.fillStyle = "#000000";
         context.font = "14px sans-serif";
         context.textBaseline = "middle";
-        context.fillText(choice[0].chance * 100 + "% chance of $" + choice[0].payoff.toFixed(2), 150, 20);
-        context.fillText(choice[1].chance * 100 + "% chance of $" + choice[1].payoff.toFixed(2), 150, 60);
+        context.fillText($filter("fraction")(choice[0].chance, 10) + " of $" + choice[0].payoff.toFixed(2), 150, 20);
+        context.fillText($filter("fraction")(choice[1].chance, 10) + " of $" + choice[1].payoff.toFixed(2), 150, 60);
       }
 
       prepareFunctions[$scope.treatment]($scope, $scope.choice);
@@ -225,13 +236,19 @@ Redwood.directive("choiceView", ["RedwoodSubject", function(rs) {
         drawLegend(context, colors, $scope.choice)
       }
 
+      $scope.angleOffset = 0;
+      $scope.doRotate = function($event) {
+        $scope.angleOffset = ($scope.viewWidth - $event.offsetX) / $scope.viewWidth * Math.PI * 2;
+      }
+
       $scope.drawPieHeight = function() {
         var colors = [[$scope.primaryColor1, $scope.secondaryColor1], [$scope.primaryColor2, $scope.secondaryColor2]];
-        var context = $element[0].getElementsByTagName("canvas")[0].getContext("2d");
+        var elem = $element[0].getElementsByTagName("canvas");
+        var context = elem[0].getContext("2d");
         
         context.clearRect(0, 0, $scope.viewWidth, $scope.viewHeight);
-        draw_pie_3d(context, 50, 0, 50, $scope.choice, colors);
-        drawLegend(context, [$scope.primaryColor1, $scope.primaryColor2], $scope.choice)
+        draw_pie_3d(context, 50, 0, 110, 50, 15, $scope.angleOffset, $scope.choice, colors);
+        drawLegend(context, [$scope.primaryColor1, $scope.primaryColor2], $scope.choice);
       }
     }
   };

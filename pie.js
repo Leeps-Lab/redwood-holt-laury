@@ -68,13 +68,10 @@ function draw_pie_border(context, startAngle, endAngle, cx, cy, radius, bottom, 
   context.fill();
 }
 
-function draw_pie_3d(context, cx, cy, radius, outcomes, colors) {
-  var bottom = 100;
-  var heightScale = 10;
+function draw_pie_3d(context, cx, cy, baseZ, radius, heightScale, angleOffset, outcomes, colors) {
   var elements = [];
-  var offset = 0.1;
 
-  var angle = offset;
+  var angle = angleOffset;
   for (var i = 0; i < outcomes.length; i++) {
     var arcLength = Math.PI*2*outcomes[i].chance;
     var newAngle = angle+arcLength;
@@ -275,11 +272,11 @@ function draw_pie_3d(context, cx, cy, radius, outcomes, colors) {
     var element = elements[i];
     context.fillStyle = element.color; 
     if (element.type == "edge") {
-      draw_pie_edge(context, element.angle, cx, cy, radius, bottom, element.height);
+      draw_pie_edge(context, element.angle, cx, cy, radius, baseZ, element.height);
     } else if (element.type == "border") {
-      draw_pie_border(context, element.angle, element.newAngle, cx, cy, radius, bottom, element.height);
+      draw_pie_border(context, element.angle, element.newAngle, cx, cy, radius, baseZ, element.height);
     } else if (element.type == "top") {
-      draw_pie_arc(context, element.angle, element.newAngle, cx, cy, radius, bottom, element.height);
+      draw_pie_arc(context, element.angle, element.newAngle, cx, cy, radius, baseZ, element.height);
     }
   }
   context.restore();

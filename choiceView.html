@@ -1,7 +1,7 @@
 <div ng-switch="treatment">
   <div ng-switch-when="text">
     <span style="vertical-align: middle">
-      {{fraction0}} of ${{dollar0 | number: 2}}, {{fraction1}} of ${{dollar1 | number: 2}} 
+      {{choice[0].chance | fraction: 10}} of ${{dollar0 | number: 2}}, {{choice[1].chance | fraction: 10}} of ${{dollar1 | number: 2}} 
     </span>
   </div>
 
@@ -13,11 +13,11 @@
       <rect ng-attr-width="{{width1}}" height="20" 
             ng-attr-x="{{width0}}" y="30" 
             ng-attr-fill="{{primaryColor2}}" /> 
-      <text x="0" y="70"> 
-        ${{choice[0].payoff | number:2}}
+      <text ng-attr-x="{{textPosition1}}" y="70" text-anchor="middle"> 
+        {{choice[0].chance | fraction: 10}} of ${{choice[0].payoff | number:2}}
       </text> 
-      <text ng-attr-x="{{width0}}" y="70"> 
-        ${{choice[1].payoff | number:2}}
+      <text ng-attr-x="{{textPosition2}}" y="70" text-anchor="middle"> 
+        {{choice[1].chance | fraction: 10}} of ${{choice[1].payoff | number:2}}
       </text> 
     </svg>
   </div>
@@ -30,11 +30,11 @@
       <rect ng-attr-width="{{width1}}" ng-attr-height="{{height1}}"
             ng-attr-x="{{width0}}" ng-attr-y="{{maxHeight-height1}}"
             ng-attr-fill="{{primaryColor2}}" /> 
-      <text x="0" ng-attr-y="{{maxHeight+20}}"> 
-        ${{choice[0].payoff | number: 2}}
+      <text ng-attr-x="{{textPosition1}}" ng-attr-y="{{maxHeight+20}}" text-anchor="middle"> 
+        {{choice[0].chance | fraction: 10}} of ${{choice[0].payoff | number:2}}
       </text> 
-      <text ng-attr-x="{{width0}}" ng-attr-y="{{maxHeight+20}}">
-        ${{choice[1].payoff | number: 2}}
+      <text ng-attr-x="{{textPosition2}}" ng-attr-y="{{maxHeight+20}}" text-anchor="middle">
+        {{choice[1].chance | fraction: 10}} of ${{choice[1].payoff | number:2}}
       </text> 
     </svg>
   </div>
@@ -44,10 +44,10 @@
         <rect ng-attr-width="{{width0}}" height="40" x="0" y="0" ng-attr-fill="{{primaryColor1}}" />
         <rect ng-attr-width="{{width1}}" height="40" x="0" y="40" ng-attr-fill="{{primaryColor2}}" />
         <text ng-attr-x="{{textX0}}" y="24" ng-attr-text-anchor="{{textAnchor0}}">
-          {{choice[0].chance*100}}% chance of ${{choice[0].payoff | number: 2}}
+          {{choice[0].chance | fraction: 10}} of ${{choice[0].payoff | number: 2}}
         </text>
         <text ng-attr-x="{{textX1}}" y="64" ng-attr-text-anchor="{{textAnchor1}}">
-          {{choice[1].chance*100}}% chance of ${{choice[1].payoff | number: 2}}
+          {{choice[1].chance | fraction: 10}} of ${{choice[1].payoff | number: 2}}
         </text>
       </svg>
   </div>
@@ -57,6 +57,6 @@
   </div>
 
   <div ng-switch-when="pie-height">
-    {{drawPieHeight()}}<canvas width="410" height="80"></canvas>
+    {{drawPieHeight()}}<canvas width="410" height="80" ng-mousemove="doRotate($event)"></canvas>
   </div>
 </div>
