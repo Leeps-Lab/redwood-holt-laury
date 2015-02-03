@@ -167,6 +167,9 @@ Redwood.directive("choiceView", ["RedwoodSubject", function(rs) {
     templateUrl: "/static/experiments/redwood-holt-laury/choiceView.html",
     link: function postLink($scope, $element, attrs) {
 
+      $scope.viewWidth = 410;
+      $scope.viewHeight = 80;
+
       var prepareFunctions = {
         "text": function($scope, choice) {
           $scope.fraction0 = (choice[0].chance * 10).toString() + "/10";
@@ -175,19 +178,19 @@ Redwood.directive("choiceView", ["RedwoodSubject", function(rs) {
           $scope.dollar1 = choice[1].payoff;
         },
         "bar": function($scope, choice) {
-          $scope.width0 = choice[0].chance * 410;
-          $scope.width1 = choice[1].chance * 410;
+          $scope.width0 = choice[0].chance * $scope.viewWidth;
+          $scope.width1 = choice[1].chance * $scope.viewWidth;
         },
         "bar-height": function($scope, choice) {
-          $scope.width0 = choice[0].chance * 410;
-          $scope.width1 = choice[1].chance * 410;
-          $scope.maxHeight = 40;
+          $scope.width0 = choice[0].chance * $scope.viewWidth;
+          $scope.width1 = choice[1].chance * $scope.viewWidth;
+          $scope.maxHeight = $scope.viewHeight/2;
           $scope.height0 = choice[0].payoff/4.0 * $scope.maxHeight;
           $scope.height1 = choice[1].payoff/4.0 * $scope.maxHeight;
         },
         "bar-inverted": function($scope, choice) {
-          $scope.width0 = choice[0].chance * 410;
-          $scope.width1 = choice[1].chance * 410;
+          $scope.width0 = choice[0].chance * $scope.viewWidth;
+          $scope.width1 = choice[1].chance * $scope.viewWidth;
           $scope.textX0 = $scope.width0 < 150 ? $scope.width0 + 10 : $scope.width0 - 10;
           $scope.textX1 = $scope.width1 < 150 ? $scope.width1 + 10 : $scope.width1 - 10;
           $scope.textAnchor0 = $scope.width0 < 150 ? "start" : "end";
@@ -217,7 +220,7 @@ Redwood.directive("choiceView", ["RedwoodSubject", function(rs) {
         var colors = [$scope.primaryColor1, $scope.primaryColor2];
         var context = $element[0].getElementsByTagName("canvas")[0].getContext("2d");
         
-        context.clearRect(0, 0, 410, 80);
+        context.clearRect(0, 0, $scope.viewWidth, $scope.viewHeight);
         draw_pie(context, 50, 40, 40, $scope.choice, colors);
         drawLegend(context, colors, $scope.choice)
       }
@@ -226,7 +229,7 @@ Redwood.directive("choiceView", ["RedwoodSubject", function(rs) {
         var colors = [[$scope.primaryColor1, $scope.secondaryColor1], [$scope.primaryColor2, $scope.secondaryColor2]];
         var context = $element[0].getElementsByTagName("canvas")[0].getContext("2d");
         
-        context.clearRect(0, 0, 410, 80);
+        context.clearRect(0, 0, $scope.viewWidth, $scope.viewHeight);
         draw_pie_3d(context, 50, 0, 50, $scope.choice, colors);
         drawLegend(context, [$scope.primaryColor1, $scope.primaryColor2], $scope.choice)
       }

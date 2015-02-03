@@ -1,48 +1,49 @@
 <div ng-controller="HoltLauryController">
-
-  <div rw-subject-header title="Economics Experiment"></div>
-
   <div class="container">
+    <div class="row hl-decision" ng-repeat="decision in decisions">
+      <div class="col-md-6 hl-choice">
+        <input id="choice-{{$index}}-0"
+               name="decision-{{$index}}"
+               type="radio"
+               ng-model="subjectDecisions[$index]"
+               value="lessRisk"
+               ng-click="selectOption($index, 'lessRisk')">
+        <label for="choice-{{$index}}-0">
+          <span ng-if="redwoodLoaded">
+            <div choice-view 
+                 class="outcome-view"
+                 treatment="treatment"
+                 choice="decision.choice1"
+                 primary-color-1="keyColor1"
+                 secondary-color-1="tintColor1"
+                 primary-color-2="keyColor2"
+                 secondary-color-2="tintColor2"></div>
+          </span>
+        </label>
+      </div>
+      <div class="col-md-6 hl-choice">
+        <input id="choice-{{$index}}-1"
+               name="decision-{{$index}}"
+               type="radio"
+               ng-model="subjectDecisions[$index]"
+               value="moreRisk"
+               ng-click="selectOption($index, 'moreRisk')">
+        <label for="choice-{{$index}}-1">
+          <span ng-if="redwoodLoaded">
+            <div choice-view 
+                 class="outcome-view"
+                 treatment="treatment"
+                 choice="decision.choice2"
+                 primary-color-1="keyColor1"
+                 secondary-color-1="tintColor1"
+                 primary-color-2="keyColor2"
+                 secondary-color-2="tintColor2"></div>
+          </span>
+        </label>
+      </div>
+    </div>
     <div class="row">
       <div class="col-md-12">
-        <div ng-repeat="decision in decisions" class="decision">
-          <label for="choice-{{$index}}-0" class="choice">
-            <input id="choice-{{$index}}-0"
-                   name="decision-{{$index}}"
-                   type="radio"
-                   ng-model="subjectDecisions[$index]"
-                   value="lessRisk"
-                   ng-click="selectOption($index, 'lessRisk')">
-            <span ng-if="redwoodLoaded">
-              <div choice-view 
-                   class="outcome-view"
-                   treatment="treatment"
-                   choice="decision.choice1"
-                   primary-color-1="keyColor1"
-                   secondary-color-1="tintColor1"
-                   primary-color-2="keyColor2"
-                   secondary-color-2="tintColor2"></div>
-            </span>
-          </label>
-          <label for="choice-{{$index}}-1" class="choice">
-            <input id="choice-{{$index}}-1"
-                   name="decision-{{$index}}"
-                   type="radio"
-                   ng-model="subjectDecisions[$index]"
-                   value="moreRisk"
-                   ng-click="selectOption($index, 'moreRisk')">
-            <span ng-if="redwoodLoaded">
-              <div choice-view 
-                   class="outcome-view"
-                   treatment="treatment"
-                   choice="decision.choice2"
-                   primary-color-1="keyColor1"
-                   secondary-color-1="tintColor1"
-                   primary-color-2="keyColor2"
-                   secondary-color-2="tintColor2"></div>
-            </span>
-          </label>
-        </div>
         <button class="anchor-button"
                 ng-click="finishPeriod()"
                 ng-disabled="unansweredQuestions > 0 || periodOver"

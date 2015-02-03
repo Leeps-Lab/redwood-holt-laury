@@ -1,4 +1,79 @@
 body {
+  background: #efefef;
+}
+
+.hl-decision {
+  border-bottom: thin solid #b8b8b8;
+}
+
+.hl-choice {
+  height: 80px;
+  margin: 10px 0;
+  line-height: 80px;
+}
+
+.hl-choice input[type=radio] {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 5px 0 0;
+}
+
+.hl-choice input[type=radio]:checked {
+  border-left: 4px solid #f0f0f0;
+}
+
+.hl-choice svg {
+  top: 0;
+  position: absolute;
+}
+
+.hl-choice canvas {
+  top: 0;
+  position: absolute;
+}
+
+.anchor-button {
+  display: block;
+  width: inherit;
+  height: 200px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  line-height: 200px;
+  font-size: 48px;
+  background: #00b64f;
+  color: #ffffff;
+  border: 0;
+  border-bottom: 8px solid #007633;
+}
+
+.anchor-button:hover {
+  background: #37da7e;
+  color: #ffffff;
+  border-bottom: 8px solid #00b64f;
+}
+
+.anchor-button:active {
+  margin-top: 28px;
+  height: 192px;
+  background: #007633;
+  color: #ffffff;
+  border-bottom: none;
+}
+
+.anchor-button:visited {
+  text-decoration: none
+}
+
+.anchor-button:disabled {
+  height: 200px !important;
+  margin-top: 20px !important;
+  cursor: default !important;
+  background: #ff4040 !important;
+  border-bottom: 8px solid #a60000 !important;
+}
+
+/*body {
     background: #efefef;
 }
 
@@ -77,4 +152,4 @@ body {
   cursor: default !important;
   background: #ff4040 !important;
   border-bottom: 8px solid #a60000 !important;
-}
+}*/
