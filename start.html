@@ -14,7 +14,14 @@
                    value="lessRisk"
                    ng-click="selectOption($index, 'lessRisk')">
             <span ng-if="redwoodLoaded">
-              <div class="outcome-view" choice-view treatment="treatment" choice="decision.choice1"></div>
+              <div choice-view 
+                   class="outcome-view"
+                   treatment="treatment"
+                   choice="decision.choice1"
+                   primary-color-1="keyColor1"
+                   secondary-color-1="tintColor1"
+                   primary-color-2="keyColor2"
+                   secondary-color-2="tintColor2"></div>
             </span>
           </label>
           <label for="choice-{{$index}}-1" class="choice">
@@ -25,7 +32,14 @@
                    value="moreRisk"
                    ng-click="selectOption($index, 'moreRisk')">
             <span ng-if="redwoodLoaded">
-              <div class="outcome-view" choice-view treatment="treatment" choice="decision.choice2"></div>
+              <div choice-view 
+                   class="outcome-view"
+                   treatment="treatment"
+                   choice="decision.choice2"
+                   primary-color-1="keyColor1"
+                   secondary-color-1="tintColor1"
+                   primary-color-2="keyColor2"
+                   secondary-color-2="tintColor2"></div>
             </span>
           </label>
         </div>

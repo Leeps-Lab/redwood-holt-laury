@@ -136,6 +136,10 @@ Redwood.controller("HoltLauryController", ["$rootScope", "$scope", "RedwoodSubje
     $scope.user_id = rs.user_id;
     $scope.treatment = rs.config.treatment;
     $scope.rowOrder = rs.config.rowOrder || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    $scope.keyColor1 = rs.config.keyColor1 || "#2382D7" || "#229fd9";
+    $scope.tintColor1 = rs.config.tintColor1 || "#4594DB" || "#1571a5";
+    $scope.keyColor2 = rs.config.keyColor2 || "#0659A3" || "#db2e1b";
+    $scope.tintColor2 = rs.config.tintColor2 || "#0B75D4" || "#b02113";
 
     // generate array of decisions specified by rowOrder
     $scope.decisions = $scope.rowOrder.map(function(row) {
@@ -151,70 +155,66 @@ Redwood.controller("HoltLauryController", ["$rootScope", "$scope", "RedwoodSubje
 
 // Rendering
 Redwood.directive("choiceView", ["RedwoodSubject", function(rs) {
-  
-  var primary_color_1 = "#229fd9";
-  var primary_color_2 = "#db2e1b";
-  var secondary_color_1 = "#1571a5";
-  var secondary_color_2 = "#b02113";
-
-  var prepareFunctions = {
-    "text": function($scope, choice) {
-      $scope.fraction0 = (choice[0].chance * 10).toString() + "/10";
-      $scope.fraction1 = (choice[1].chance * 10).toString() + "/10";
-      $scope.dollar0 = choice[0].payoff;
-      $scope.dollar1 = choice[1].payoff;
-    },
-    "bar": function($scope, choice) {
-      $scope.width0 = choice[0].chance * 410;
-      $scope.width1 = choice[1].chance * 410;
-    },
-    "bar-height": function($scope, choice) {
-      $scope.width0 = choice[0].chance * 410;
-      $scope.width1 = choice[1].chance * 410;
-      $scope.maxHeight = 40;
-      $scope.height0 = choice[0].payoff/4.0 * $scope.maxHeight;
-      $scope.height1 = choice[1].payoff/4.0 * $scope.maxHeight;
-    },
-    "bar-inverted": function($scope, choice) {
-      $scope.width0 = choice[0].chance * 410;
-      $scope.width1 = choice[1].chance * 410;
-      $scope.textX0 = $scope.width0 < 150 ? $scope.width0 + 10 : $scope.width0 - 10;
-      $scope.textX1 = $scope.width1 < 150 ? $scope.width1 + 10 : $scope.width1 - 10;
-      $scope.textAnchor0 = $scope.width0 < 150 ? "start" : "end";
-      $scope.textAnchor1 = $scope.width1 < 150 ? "start" : "end";
-    },
-    "pie": function($scope, choice) {},
-    "pie-height": function($scope, choice) {}
-  }
-
-  var drawLegend = function(context, colors, choice) {
-    context.fillStyle = colors[0];
-    context.fillRect(120, 10, 20, 20);
-
-    context.fillStyle = colors[1];
-    context.fillRect(120, 50, 20, 20);
-
-    context.fillStyle = "#000000";
-    context.font = "14px sans-serif";
-    context.textBaseline = "middle";
-    context.fillText(choice[0].chance * 100 + "% chance of $" + choice[0].payoff.toFixed(2), 150, 20);
-    context.fillText(choice[1].chance * 100 + "% chance of $" + choice[1].payoff.toFixed(2), 150, 60);
-  }
-  
   return {
     scope: {
       choice: "=",
-      treatment: "="
+      treatment: "=",
+      primaryColor1: "=",
+      secondaryColor1: "=",
+      primaryColor2: "=",
+      secondaryColor2: "="
     },
     templateUrl: "/static/experiments/redwood-holt-laury/choiceView.html",
     link: function postLink($scope, $element, attrs) {
 
+      var prepareFunctions = {
+        "text": function($scope, choice) {
+          $scope.fraction0 = (choice[0].chance * 10).toString() + "/10";
+          $scope.fraction1 = (choice[1].chance * 10).toString() + "/10";
+          $scope.dollar0 = choice[0].payoff;
+          $scope.dollar1 = choice[1].payoff;
+        },
+        "bar": function($scope, choice) {
+          $scope.width0 = choice[0].chance * 410;
+          $scope.width1 = choice[1].chance * 410;
+        },
+        "bar-height": function($scope, choice) {
+          $scope.width0 = choice[0].chance * 410;
+          $scope.width1 = choice[1].chance * 410;
+          $scope.maxHeight = 40;
+          $scope.height0 = choice[0].payoff/4.0 * $scope.maxHeight;
+          $scope.height1 = choice[1].payoff/4.0 * $scope.maxHeight;
+        },
+        "bar-inverted": function($scope, choice) {
+          $scope.width0 = choice[0].chance * 410;
+          $scope.width1 = choice[1].chance * 410;
+          $scope.textX0 = $scope.width0 < 150 ? $scope.width0 + 10 : $scope.width0 - 10;
+          $scope.textX1 = $scope.width1 < 150 ? $scope.width1 + 10 : $scope.width1 - 10;
+          $scope.textAnchor0 = $scope.width0 < 150 ? "start" : "end";
+          $scope.textAnchor1 = $scope.width1 < 150 ? "start" : "end";
+        },
+        "pie": function($scope, choice) {},
+        "pie-height": function($scope, choice) {}
+      }
+
+      var drawLegend = function(context, colors, choice) {
+        context.fillStyle = colors[0];
+        context.fillRect(120, 10, 20, 20);
+
+        context.fillStyle = colors[1];
+        context.fillRect(120, 50, 20, 20);
+
+        context.fillStyle = "#000000";
+        context.font = "14px sans-serif";
+        context.textBaseline = "middle";
+        context.fillText(choice[0].chance * 100 + "% chance of $" + choice[0].payoff.toFixed(2), 150, 20);
+        context.fillText(choice[1].chance * 100 + "% chance of $" + choice[1].payoff.toFixed(2), 150, 60);
+      }
+
       prepareFunctions[$scope.treatment]($scope, $scope.choice);
-      $scope.primary_color_1 = primary_color_1;
-      $scope.primary_color_2 = primary_color_2;
 
       $scope.drawPie = function() {
-        var colors = [primary_color_1, primary_color_2];
+        var colors = [$scope.primaryColor1, $scope.primaryColor2];
         var context = $element[0].getElementsByTagName("canvas")[0].getContext("2d");
         
         context.clearRect(0, 0, 410, 80);
@@ -223,12 +223,12 @@ Redwood.directive("choiceView", ["RedwoodSubject", function(rs) {
       }
 
       $scope.drawPieHeight = function() {
-        var colors = [[primary_color_1, secondary_color_1], [primary_color_2, secondary_color_2]];
+        var colors = [[$scope.primaryColor1, $scope.secondaryColor1], [$scope.primaryColor2, $scope.secondaryColor2]];
         var context = $element[0].getElementsByTagName("canvas")[0].getContext("2d");
         
         context.clearRect(0, 0, 410, 80);
         draw_pie_3d(context, 50, 0, 50, $scope.choice, colors);
-        drawLegend(context, [primary_color_1, primary_color_2], $scope.choice)
+        drawLegend(context, [$scope.primaryColor1, $scope.primaryColor2], $scope.choice)
       }
     }
   };

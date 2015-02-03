@@ -9,10 +9,10 @@
     <svg width="100%" height="100%" viewBox="0 0 410 80"> 
       <rect ng-attr-width="{{width0}}" height="20" 
             x="0" y="0" 
-            fill="{{primary_color_1}}" /> 
+            ng-attr-fill="{{primaryColor1}}" /> 
       <rect ng-attr-width="{{width1}}" height="20" 
             ng-attr-x="{{width0}}" y="0" 
-            ng-attr-fill="{{primary_color_2}}" /> 
+            ng-attr-fill="{{primaryColor2}}" /> 
       <text x="0" y="40"> 
         ${{choice[0].payoff | number:2}}
       </text> 
@@ -26,10 +26,10 @@
     <svg width="100%" height="100%" viewBox="0 0 410 80"> 
       <rect ng-attr-width="{{width0}}" ng-attr-height="{{height0}}"
             x="0" ng-attr-y="{{(maxHeight-height0)}}" 
-            ng-attr-fill="{{primary_color_1}}" /> 
+            ng-attr-fill="{{primaryColor1}}" /> 
       <rect ng-attr-width="{{width1}}" ng-attr-height="{{height1}}"
             ng-attr-x="{{width0}}" ng-attr-y="{{maxHeight-height1}}"
-            ng-attr-fill="{{primary_color_2}}" /> 
+            ng-attr-fill="{{primaryColor2}}" /> 
       <text x="0" ng-attr-y="{{maxHeight+20}}"> 
         ${{choice[0].payoff | number: 2}}
       </text> 
@@ -41,8 +41,8 @@
 
   <div ng-switch-when="bar-inverted">
     <svg width="400px" height="80px" viewBox="0 0 400 80">
-        <rect ng-attr-width="{{width0}}" height="40" x="0" y="0" ng-attr-fill="{{primary_color_1}}" />
-        <rect ng-attr-width="{{width1}}" height="40" x="0" y="40" ng-attr-fill="{{primary_color_2}}" />
+        <rect ng-attr-width="{{width0}}" height="40" x="0" y="0" ng-attr-fill="{{primaryColor1}}" />
+        <rect ng-attr-width="{{width1}}" height="40" x="0" y="40" ng-attr-fill="{{primaryColor2}}" />
         <text ng-attr-x="{{textX0}}" y="24" ng-attr-text-anchor="{{textAnchor0}}">
           {{choice[0].chance*100}}% chance of ${{choice[0].payoff | number: 2}}
         </text>
