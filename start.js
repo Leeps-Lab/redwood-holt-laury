@@ -259,7 +259,8 @@ Redwood.directive("choiceView", ["RedwoodSubject", "$filter", function(rs, $filt
         drawLegend(context, colors, $scope.choice)
       }
 
-      $scope.angleOffset = 0;
+      // hack to make sure that the completely filled pies display correctly
+      $scope.angleOffset = 0.0001;
       $scope.doRotate = function($event) {
         $scope.angleOffset = ($scope.viewWidth - $event.offsetX) / $scope.viewWidth * Math.PI * 2;
       }
