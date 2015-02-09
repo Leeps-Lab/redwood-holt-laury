@@ -202,6 +202,26 @@ Redwood.directive("choiceView", ["RedwoodSubject", "$filter", function(rs, $filt
           $scope.height1 = choice[1].payoff/4.0 * $scope.maxHeight;
           $scope.textPosition1 = Math.max($scope.width0 / 2, 50);
           $scope.textPosition2 = $scope.width0 + $scope.width1 / 2;
+
+          $scope.payoffText0Position = [
+            -20,
+            $scope.maxHeight - $scope.height0
+          ];
+
+          $scope.probText0Position = [
+              $scope.width0 / 2,
+              $scope.maxHeight + 20
+          ];
+
+          $scope.payoffText1Position = [
+            $scope.viewWidth + 20,
+            $scope.maxHeight - $scope.height1
+          ];
+
+          $scope.probText1Position = [
+              $scope.width0 + $scope.width1 / 2,
+              $scope.maxHeight + 20
+          ];
         },
         "bar-inverted": function($scope, choice) {
           $scope.width0 = choice[0].chance * $scope.viewWidth;
