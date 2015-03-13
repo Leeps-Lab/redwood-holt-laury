@@ -8,10 +8,10 @@
                ng-model="subjectDecisions[$index]"
                value="lessRisk"
                ng-click="selectOption($index, 'lessRisk')">
-        <label>
+        <label for="choice-{{$index}}-0">
           <span ng-if="redwoodLoaded">
             <div choice-view 
-                 class="outcome-view"
+                 class="hl-outcome-view"
                  treatment="treatment"
                  choice="decision.choice1"
                  show-probability="showProbability"
@@ -30,10 +30,10 @@
                ng-model="subjectDecisions[$index]"
                value="moreRisk"
                ng-click="selectOption($index, 'moreRisk')">
-        <label>
+        <label for="choice-{{$index}}-1">
           <span ng-if="redwoodLoaded">
             <div choice-view 
-                 class="outcome-view"
+                 class="hl-outcome-view"
                  treatment="treatment"
                  choice="decision.choice2"
                  show-probability="showProbability"

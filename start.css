@@ -32,6 +32,10 @@ body {
   position: absolute;
 }
 
+.hl-choice:hover {
+  background: #f8f8f8;
+}
+
 .anchor-button {
   display: block;
   width: inherit;
