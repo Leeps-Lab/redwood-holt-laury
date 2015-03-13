@@ -3,7 +3,15 @@ body {
 }
 
 .hl-decision {
+  position: relative;
   border-bottom: thin solid #b8b8b8;
+}
+
+.hl-decision-label {
+  position: absolute;
+  left: -24px;
+  line-height: 100px;
+  font-size: 24px;
 }
 
 .hl-choice {

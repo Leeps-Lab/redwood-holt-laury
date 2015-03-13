@@ -1,6 +1,9 @@
 <div ng-controller="HoltLauryController">
   <div class="container">
     <div class="row hl-decision" ng-repeat="decision in decisions">
+      <div class="hl-decision-label">
+        {{$index}}
+      </div>
       <div class="col-md-6 hl-choice">
         <input id="choice-{{$index}}-0"
                name="decision-{{$index}}"
