@@ -2,7 +2,12 @@
   Holt-Laury Experiment Start Page Controller
 */
 
-Redwood.controller("HoltLauryController", ["$rootScope", "$scope", "RedwoodSubject", function($rootScope, $scope, rs) {
+Redwood.controller("HoltLauryController", [
+  "$rootScope",
+  "$scope",
+  "RedwoodSubject",
+  "ConfigManager", 
+  function($rootScope, $scope, rs, configManager) {
 
   $scope.allDecisions = [
     {
@@ -84,7 +89,7 @@ Redwood.controller("HoltLauryController", ["$rootScope", "$scope", "RedwoodSubje
     }, 0);
 
     rs.trigger("hl.finished_questions", {
-      "view": $scope.treatment,
+      "view": $scope.config.treatment,
       "result": score,
       "result-text": $scope.riskAversionText[score]
     });
@@ -93,13 +98,13 @@ Redwood.controller("HoltLauryController", ["$rootScope", "$scope", "RedwoodSubje
     var comprehensiveDecisions = $scope.subjectDecisions.map(function(decision, index) {
       return {
         "decision": decision,
-        "choices": [ $scope.decisions[index].choice1, $scope.decisions[index].choice2]
+        "choices": [ $scope.decisions[index].choice1, $scope.decisions[index].choice2 ]
       }
     });
     
     rs.set("hl.results", {
       "period": rs.period,
-      "view": $scope.treatment,
+      "view": $scope.config.treatment,
       "decisions": comprehensiveDecisions
     });
     
@@ -109,7 +114,7 @@ Redwood.controller("HoltLauryController", ["$rootScope", "$scope", "RedwoodSubje
 
   $scope.selectOption = function(decisionId, selection) {
     rs.trigger("hl.selected_option", {
-      "treatment": $scope.treatment,
+      "treatment": $scope.config.treatment,
       "question-text": $scope.decisions[decisionId].text,
       "question": decisionId+1,
       "selection": selection 
@@ -134,17 +139,19 @@ Redwood.controller("HoltLauryController", ["$rootScope", "$scope", "RedwoodSubje
   
   rs.on_load(function() { //called once the page has loaded for a new sub period
     $scope.user_id = rs.user_id;
-    $scope.treatment = rs.config.treatment;
-    $scope.rowOrder = rs.config.rowOrder || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    $scope.showProbability = rs.config.hasOwnProperty("showProbability") ? rs.config.showProbability : true;
-    $scope.showPayoff = rs.config.hasOwnProperty("showPayoff") ? rs.config.showPayoff : true;
-    $scope.keyColor1 = rs.config.keyColor1 || "#2382D7" || "#229fd9";
-    $scope.tintColor1 = rs.config.tintColor1 || "#4594DB" || "#1571a5";
-    $scope.keyColor2 = rs.config.keyColor2 || "#0659A3" || "#db2e1b";
-    $scope.tintColor2 = rs.config.tintColor2 || "#0B75D4" || "#b02113";
+    $scope.config = configManager.loadPerSubject(rs, {
+      "treatment": "text",
+      "rowOrder": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      "showProbability": true,
+      "showPayoff": true,
+      "keyColor1": "#2382D7",
+      "tintColor1": "#4594DB",
+      "keyColor2": "#0659A3",
+      "tintColor2": "#0B75D4"
+    });
 
     // generate array of decisions specified by rowOrder
-    $scope.decisions = $scope.rowOrder.map(function(row) {
+    $scope.decisions = $scope.config.rowOrder.map(function(row) {
       var index = row - 1;
       return $scope.allDecisions[index];
     });
