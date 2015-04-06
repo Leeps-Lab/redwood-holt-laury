@@ -9,8 +9,8 @@
                name="decision-{{$index}}"
                type="radio"
                ng-model="subjectDecisions[$index]"
-               value="lessRisk"
-               ng-click="selectOption($index, 'lessRisk')">
+               value="0"
+               ng-click="selectOption($index, 0)">
         <label for="choice-{{$index}}-0">
           <span ng-if="redwoodLoaded">
             <div choice-view 
@@ -31,8 +31,8 @@
                name="decision-{{$index}}"
                type="radio"
                ng-model="subjectDecisions[$index]"
-               value="moreRisk"
-               ng-click="selectOption($index, 'moreRisk')">
+               value="1"
+               ng-click="selectOption($index, 1)">
         <label for="choice-{{$index}}-1">
           <span ng-if="redwoodLoaded">
             <div choice-view 

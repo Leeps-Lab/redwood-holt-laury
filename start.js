@@ -61,20 +61,6 @@ Redwood.controller("HoltLauryController", [
       choice2: [{chance: 1.0, payoff: 3.85}, {chance: 0.0, payoff: 0.10}]
     }
   ];
-
-  $scope.riskAversionText = [
-    "highly risk loving",
-    "highly risk loving",
-    "very risk loving",
-    "risk loving",
-    "risk neutral",
-    "slightly risk averse",
-    "risk averse",
-    "very risk averse",
-    "highly risk averse",
-    "stay in bed",
-    "stay in bed"
-  ];
   
   // bound to the users radio button selections
   $scope.subjectDecisions = [];
@@ -84,16 +70,6 @@ Redwood.controller("HoltLauryController", [
   $scope.redwoodLoaded = false;
 
   $scope.finishPeriod = function() {
-    var score = $scope.subjectDecisions.reduce(function(prev, curr, index, array) {
-      return prev + (curr === "lessRisk" ? 1 : 0);
-    }, 0);
-
-    rs.trigger("hl.finished_questions", {
-      "view": $scope.config.treatment,
-      "result": score,
-      "result-text": $scope.riskAversionText[score]
-    });
-
     // save data for payouts
     var comprehensiveDecisions = $scope.subjectDecisions.map(function(decision, index) {
       return {
