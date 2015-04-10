@@ -7,7 +7,7 @@ Redwood.controller("HLFinishController", ["$scope", "RedwoodSubject", function($
 
     $scope.payoutFunction = function(entry) {
         if (entry.selected && entry.decision) {
-            var subjectChoice = entry.decision.decision === "lessRisk" ? 0 : 1;
+            var subjectChoice = entry.decision.decision;
             var lottery = entry.decision.choices[subjectChoice];
 
             // perform the random lottery
@@ -58,7 +58,7 @@ Redwood.controller("HLFinishController", ["$scope", "RedwoodSubject", function($
     rs.on("hl.payout_select_decision", function(decisionID) {
         var index = decisionID - 1;
         var decision = $scope.selectedResult.decisions[index];
-        var subjectChoice = decision.decision === "lessRisk" ? 0 : 1;
+        var subjectChoice = decision.decision;
         var lottery = decision.choices[subjectChoice];
 
         $scope.selectedResult.decision = decision;
