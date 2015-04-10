@@ -1,0 +1,42 @@
+[
+  [
+    [{"chance": 0.1, "payoff": 4}, {"chance": 0.9, "payoff": 2.56}],
+    [{"chance": 0.1, "payoff": 14.82}, {"chance": 0.9, "payoff": 0.01}]
+  ],
+  [
+    [{"chance": 0.2, "payoff": 4}, {"chance": 0.8, "payoff": 2.56}],
+    [{"chance": 0.2, "payoff": 14.82}, {"chance": 0.8, "payoff": 0.01}]
+  ],
+  [
+    [{"chance": 0.3, "payoff": 4}, {"chance": 0.7, "payoff": 2.56}],
+    [{"chance": 0.3, "payoff": 14.82}, {"chance": 0.7, "payoff": 0.01}]
+  ],
+  [
+    [{"chance": 0.4, "payoff": 4}, {"chance": 0.6, "payoff": 2.56}],
+    [{"chance": 0.4, "payoff": 14.82}, {"chance": 0.6, "payoff": 0.01}]
+  ],
+  [
+    [{"chance": 0.5, "payoff": 4}, {"chance": 0.5, "payoff": 2.56}],
+    [{"chance": 0.5, "payoff": 14.82}, {"chance": 0.5, "payoff": 0.01}]
+  ],
+  [
+    [{"chance": 0.6, "payoff": 4}, {"chance": 0.4, "payoff": 2.56}],
+    [{"chance": 0.6, "payoff": 14.82}, {"chance": 0.4, "payoff": 0.01}]
+  ],
+  [
+    [{"chance": 0.7, "payoff": 4}, {"chance": 0.3, "payoff": 2.56}],
+    [{"chance": 0.7, "payoff": 14.82}, {"chance": 0.3, "payoff": 0.01}]
+  ],
+  [
+    [{"chance": 0.8, "payoff": 4}, {"chance": 0.2, "payoff": 2.56}],
+    [{"chance": 0.8, "payoff": 14.82}, {"chance": 0.2, "payoff": 0.01}]
+  ],
+  [
+    [{"chance": 0.9, "payoff": 4}, {"chance": 0.1, "payoff": 2.56}],
+    [{"chance": 0.9, "payoff": 14.82}, {"chance": 0.1, "payoff": 0.01}]
+  ],
+  [
+    [{"chance": 1, "payoff": 4}, {"chance": 0, "payoff": 2.56}],
+    [{"chance": 1, "payoff": 14.82}, {"chance": 0, "payoff": 0.01}]
+  ]
+]

@@ -105,7 +105,7 @@ Redwood.controller("HoltLauryController", [
   });
   
   rs.on_load(function() { //called once the page has loaded for a new sub period
-    $scope.user_id = rs.user_id;
+
     $scope.config = configManager.loadPerSubject(rs, {
       "treatment": "text",
       "rowOrder": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -115,18 +115,28 @@ Redwood.controller("HoltLauryController", [
       "tintColor1": "#4594DB",
       "keyColor2": "#0659A3",
       "tintColor2": "#0B75D4",
-      "lotteries": null
+      "lotteryFile": null
     });
 
-    // generate array of decisions specified by rowOrder
-    $scope.decisions = $scope.config.rowOrder.map(function(row) {
-      var index = row - 1;
-      return $scope.defaultDecisions[index];
-    });
+    var buildDecisionArray = function(allDecisions) {
+      // generate array of decisions specified by rowOrder
+      $scope.decisions = $scope.config.rowOrder.map(function(row) {
+        var index = row - 1;
+        return allDecisions[index];
+      });
 
-    $scope.maxQuestions = $scope.decisions.length;
+      $scope.maxQuestions = $scope.decisions.length;
+      $scope.redwoodLoaded = true;
+    }
 
-    $scope.redwoodLoaded = true;
+    if ($scope.config.lotteryFile) {
+      $http.get($scope.config.lotteryFile).then(function(response) {
+        buildDecisionArray(response.data);
+      });
+    }
+    else {
+      buildDecisionArray($scope.defaultDecisions);
+    }
   });
 }]);
 
