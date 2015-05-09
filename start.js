@@ -42,7 +42,7 @@ Redwood.controller("HoltLauryController", [
     ],
     [
       [{chance: 0.8, payoff: 2.00}, {chance: 0.2, payoff: 1.60}],
-      [{chance: 0.8, payoff: 8.00}, {chance: 0.2, payoff: 0.10}]
+      [{chance: 0.8, payoff: 14.00}, {chance: 0.2, payoff: 0.10}]
     ],
     [
       [{chance: 0.9, payoff: 2.00}, {chance: 0.1, payoff: 1.60}],
@@ -127,8 +127,8 @@ Redwood.controller("HoltLauryController", [
           heightScale = 8;
         else if (maxPayoff < 12)
           heightScale = 5;
-        else // this scale is fine for payoff vaues up to $30
-          heightScale = 2;
+        else // this scale is fine for payoff vaues up to $15
+          heightScale = 4;
       }
       return heightScale;
     }
