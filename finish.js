@@ -36,7 +36,7 @@ Redwood.controller("HLFinishController", ["$scope", "RedwoodSubject", function($
             $scope.results.push(result);
         }
 
-        rs.send("__set_show_up_fee__", {show_up_fee: 5.0});
+        rs.send("__set_show_up_fee__", {show_up_fee: 7.0});
         rs.send("__set_conversion_rate__", {conversion_rate: 1/140});
     });
 
