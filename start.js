@@ -14,23 +14,23 @@ Redwood.controller("HoltLauryController", [
   $scope.defaultDecisions = [
     [
       [{chance: 0.1, payoff: 2.00}, {chance: 0.9, payoff: 1.60}],
-      [{chance: 0.1, payoff: 3.85}, {chance: 0.9, payoff: 0.10}]
+      [{chance: 0.1, payoff: 5.50}, {chance: 0.9, payoff: 0.10}]
     ],
     [
       [{chance: 0.2, payoff: 2.00}, {chance: 0.8, payoff: 1.60}],
-      [{chance: 0.2, payoff: 3.85}, {chance: 0.8, payoff: 0.10}]
+      [{chance: 0.2, payoff: 4.85}, {chance: 0.8, payoff: 0.10}]
     ],
     [
       [{chance: 0.3, payoff: 2.00}, {chance: 0.7, payoff: 1.60}],
-      [{chance: 0.3, payoff: 3.85}, {chance: 0.7, payoff: 0.10}]
+      [{chance: 0.3, payoff: 2.85}, {chance: 0.7, payoff: 0.10}]
     ],
     [
       [{chance: 0.4, payoff: 2.00}, {chance: 0.6, payoff: 1.60}],
-      [{chance: 0.4, payoff: 3.85}, {chance: 0.6, payoff: 0.10}]
+      [{chance: 0.4, payoff: 1.85}, {chance: 0.6, payoff: 0.10}]
     ],
     [
       [{chance: 0.5, payoff: 2.00}, {chance: 0.5, payoff: 1.60}],
-      [{chance: 0.5, payoff: 3.85}, {chance: 0.5, payoff: 0.10}]
+      [{chance: 0.5, payoff: 2.85}, {chance: 0.5, payoff: 0.10}]
     ],
     [
       [{chance: 0.6, payoff: 2.00}, {chance: 0.4, payoff: 1.60}],
@@ -42,15 +42,15 @@ Redwood.controller("HoltLauryController", [
     ],
     [
       [{chance: 0.8, payoff: 2.00}, {chance: 0.2, payoff: 1.60}],
-      [{chance: 0.8, payoff: 3.85}, {chance: 0.2, payoff: 0.10}]
+      [{chance: 0.8, payoff: 8.00}, {chance: 0.2, payoff: 0.10}]
     ],
     [
       [{chance: 0.9, payoff: 2.00}, {chance: 0.1, payoff: 1.60}],
-      [{chance: 0.9, payoff: 3.85}, {chance: 0.1, payoff: 0.10}]
+      [{chance: 0.9, payoff: 6.00}, {chance: 0.1, payoff: 0.10}]
     ],
     [
       [{chance: 1.0, payoff: 2.00}, {chance: 0.0, payoff: 1.60}],
-      [{chance: 1.0, payoff: 3.85}, {chance: 0.0, payoff: 0.10}]
+      [{chance: 1.0, payoff: 4.00}, {chance: 0.0, payoff: 0.10}]
     ]
   ];
   
@@ -63,29 +63,21 @@ Redwood.controller("HoltLauryController", [
 
   $scope.finishPeriod = function() {
     // save data for payouts
-    var comprehensiveDecisions = $scope.subjectDecisions.map(function(decision, index) {
+    var comprehensiveDecisions = $scope.subjectDecisions.map(function(decision, index) { 
       return {
         "decision": decision,
-        "choices": [ $scope.decisions[index][0], $scope.decisions[index][1] ]
+        "choices": [ $scope.decisions[index][0], $scope.decisions[index][1] ] 
       }
     });
     
     rs.set("hl.results", {
       "period": rs.period,
       "view": $scope.config.treatment,
-      "decisions": comprehensiveDecisions
+      "decisions": comprehensiveDecisions // EH - the scope for this 'decision' is just rs - not the same decisions as used elsewhere
     });
     
     $scope.periodOver = true;
     rs.next_period();
-  };
-
-  $scope.selectOption = function(decisionId, selection) {
-    rs.trigger("hl.selected_option", {
-      "treatment": $scope.config.treatment,
-      "question": decisionId+1,
-      "selection": selection 
-    });
   };
 
   $scope.recomputeUnansweredQuestions = function() {
@@ -96,16 +88,15 @@ Redwood.controller("HoltLauryController", [
     $scope.unansweredQuestions = $scope.maxQuestions - answerCount;
   };
 
-  $scope.$watch("maxQuestions", $scope.recomputeUnansweredQuestions);
+  //$scope.$watch("maxQuestions", $scope.recomputeUnansweredQuestions);
 
-  rs.on("hl.selected_option", function(value) {
-    // seems redundant, but necessary for restoring when the page is refreshed
-    $scope.subjectDecisions[value.question-1] = value.selection;
+  // Called when one of the radio buttons is selected
+  $scope.selectOption = function(decisionId, selection) {
+    $scope.subjectDecisions[decisionId] = selection;
     $scope.recomputeUnansweredQuestions();
-  });
+  };
   
   rs.on_load(function() { //called once the page has loaded for a new sub period
-
     $scope.config = configManager.loadPerSubject(rs, {
       "treatment": "text",
       "rowOrder": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -137,6 +128,32 @@ Redwood.controller("HoltLauryController", [
     else {
       buildDecisionArray($scope.defaultDecisions);
     }
+
+    var findScope = function(decisions) {
+      //Find maximum possible payoff value
+      var maxPayoff = 0;
+      for (var i = 0; i < $scope.decisions.length; i++) {
+        for (var j = 0; j < $scope.decisions[i].length; j++) {
+          for (var k = 0; k < $scope.decisions[i][j].length; k++) {
+            if ($scope.decisions[i][j][k].payoff > maxPayoff)
+              maxPayoff = $scope.decisions[i][j][k].payoff;
+          }
+        }
+      }
+      //Set the height scale based off of the current max payoff
+      var heightScale = 14; //default - if maxPayoff <= 4
+      if (maxPayoff > 4) {          
+        if (maxPayoff < 7)
+          heightScale = 8;
+        else if (maxPayoff < 12)
+          heightScale = 5;
+        else // this scale is fine for payoff vaues up to $30
+          heightScale = 2;
+      }
+      return heightScale;
+    }
+
+    $scope.heightScale = findScope($scope.decisions);
   });
 }]);
 

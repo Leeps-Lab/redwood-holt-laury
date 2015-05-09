@@ -8,11 +8,11 @@ Redwood.directive("choiceView", ["RedwoodSubject", "$filter", function(rs, $filt
       primaryColor1: "=",
       secondaryColor1: "=",
       primaryColor2: "=",
-      secondaryColor2: "="
+      secondaryColor2: "=",
+      heightScale: "="
     },
     templateUrl: "/static/experiments/redwood-holt-laury/choiceView.html",
     link: function postLink($scope, $element, attrs) {
-
       $scope.viewWidth = 410;
       $scope.viewHeight = 80;
 
@@ -118,13 +118,15 @@ Redwood.directive("choiceView", ["RedwoodSubject", "$filter", function(rs, $filt
         $scope.angleOffset = ($scope.viewWidth - $event.offsetX) / $scope.viewWidth * Math.PI * 2;
       }
 
+      //$scope.$watch("heightScale", $scope.drawPieHeight);
+
       $scope.drawPieHeight = function() {
+        console.log("scale: " + $scope.heightScale);
         var colors = [[$scope.primaryColor1, $scope.secondaryColor1], [$scope.primaryColor2, $scope.secondaryColor2]];
         var elem = $element[0].getElementsByTagName("canvas");
-        var context = elem[0].getContext("2d");
-        
+        var context = elem[0].getContext("2d");        
         context.clearRect(0, 0, $scope.viewWidth, $scope.viewHeight);
-        draw_pie_3d(context, 50, 0, 110, 50, 15, $scope.angleOffset, $scope.choice, colors);
+        draw_pie_3d(context, 50, 0, 110, 50, $scope.heightScale, $scope.angleOffset, $scope.choice, colors);
         drawLegend(context, [$scope.primaryColor1, $scope.primaryColor2], $scope.choice);
       }
     }
