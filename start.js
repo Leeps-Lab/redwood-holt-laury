@@ -109,27 +109,7 @@ Redwood.controller("HoltLauryController", [
       "lotteryFile": null
     });
 
-    var buildDecisionArray = function(allDecisions) {
-      // generate array of decisions specified by rowOrder
-      $scope.decisions = $scope.config.rowOrder.map(function(row) {
-        var index = row - 1;
-        return allDecisions[index];
-      });
-
-      $scope.maxQuestions = $scope.decisions.length;
-      $scope.redwoodLoaded = true;
-    }
-
-    if ($scope.config.lotteryFile) {
-      $http.get($scope.config.lotteryFile).then(function(response) {
-        buildDecisionArray(response.data);
-      });
-    }
-    else {
-      buildDecisionArray($scope.defaultDecisions);
-    }
-
-    var findScope = function(decisions) {
+    var findScale = function(decisions) {
       //Find maximum possible payoff value
       var maxPayoff = 0;
       for (var i = 0; i < $scope.decisions.length; i++) {
@@ -153,7 +133,26 @@ Redwood.controller("HoltLauryController", [
       return heightScale;
     }
 
-    $scope.heightScale = findScope($scope.decisions);
+    var buildDecisionArray = function(allDecisions) {
+      // generate array of decisions specified by rowOrder
+      $scope.decisions = $scope.config.rowOrder.map(function(row) {
+        var index = row - 1;
+        return allDecisions[index];
+      });
+
+      $scope.maxQuestions = $scope.decisions.length;
+      $scope.redwoodLoaded = true;
+      $scope.heightScale = findScale($scope.decisions);
+    }
+
+    if ($scope.config.lotteryFile) {
+      $http.get($scope.config.lotteryFile).then(function(response) {
+        buildDecisionArray(response.data);
+      });
+    }
+    else {
+      buildDecisionArray($scope.defaultDecisions);
+    }
   });
 }]);
 
