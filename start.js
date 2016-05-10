@@ -53,7 +53,7 @@ Redwood.controller("HoltLauryController", [
       [{chance: 1.0, payoff: 4.00}, {chance: 0.0, payoff: 0.10}]
     ]
   ];
-  
+
   // bound to the users radio button selections
   $scope.subjectDecisions = [];
   $scope.maxQuestions = 10;
@@ -63,19 +63,20 @@ Redwood.controller("HoltLauryController", [
 
   $scope.finishPeriod = function() {
     // save data for payouts
-    var comprehensiveDecisions = $scope.subjectDecisions.map(function(decision, index) { 
+    var comprehensiveDecisions = $scope.subjectDecisions.map(function(decision, index) {
       return {
         "decision": decision,
-        "choices": [ $scope.decisions[index][0], $scope.decisions[index][1] ] 
+        "choices": [ $scope.decisions[index][0], $scope.decisions[index][1] ]
       }
     });
-    
+
     rs.set("hl.results", {
       "period": rs.period,
       "view": $scope.config.treatment,
+      "subject": parseInt(rs.user_id) - 1,
       "decisions": comprehensiveDecisions // EH - the scope for this 'decision' is just rs - not the same decisions as used elsewhere
     });
-    
+
     $scope.periodOver = true;
     rs.next_period();
   };
@@ -95,7 +96,7 @@ Redwood.controller("HoltLauryController", [
     $scope.subjectDecisions[decisionId] = selection;
     $scope.recomputeUnansweredQuestions();
   };
-  
+
   rs.on_load(function() { //called once the page has loaded for a new sub period
     $scope.config = configManager.loadPerSubject(rs, {
       "treatment": "text",
@@ -122,7 +123,7 @@ Redwood.controller("HoltLauryController", [
       }
       //Set the height scale based off of the current max payoff
       var heightScale = 14; //default - if maxPayoff <= 4
-      if (maxPayoff > 4) {          
+      if (maxPayoff > 4) {
         if (maxPayoff < 7)
           heightScale = 8;
         else if (maxPayoff < 12)
