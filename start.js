@@ -73,7 +73,7 @@ Redwood.controller("HoltLauryController", [
     rs.set("hl.results", {
       "period": rs.period,
       "view": $scope.config.treatment,
-      "subject": parseInt(rs.user_id) - 1,
+      "subject": parseInt(rs.user_id),
       "decisions": comprehensiveDecisions // EH - the scope for this 'decision' is just rs - not the same decisions as used elsewhere
     });
 
