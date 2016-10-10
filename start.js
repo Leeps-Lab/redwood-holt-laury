@@ -96,6 +96,7 @@ Redwood.controller("HoltLauryController", [
     $scope.subjectDecisions[decisionId] = selection;
     $scope.recomputeUnansweredQuestions();
   };
+  $scope.recomputeUnansweredQuestions();
 
   rs.on_load(function() { //called once the page has loaded for a new sub period
     $scope.config = configManager.loadPerSubject(rs, {
